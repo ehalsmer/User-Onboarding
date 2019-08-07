@@ -1,6 +1,7 @@
 import React from "react";
 import { withFormik, Form as FormikForm, Field } from "formik";
 import * as Yup from 'yup';
+import axios from 'axios';
 
 /*
 - Name
@@ -56,8 +57,14 @@ const FormikOnboardForm = withFormik({
     }),
 
     handleSubmit(values){
-        console.log('Values in handleSubmit', values);
-
+        // console.log('Values in handleSubmit', values);
+        axios.post('https://reqres.in/api/users', values)
+        .then((response)=>{
+            console.log('RESPONSE', response)
+        })
+        .catch((error)=>{
+            console.log('ERROR', error)
+        })
     }
 })(OnboardForm);
 
