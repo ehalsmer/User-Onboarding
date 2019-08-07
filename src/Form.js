@@ -2,14 +2,7 @@ import React, { useState, useEffect } from "react";
 import { withFormik, Form as FormikForm, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-
-/*
-- Name
-- Email
-- Password
-- Terms of Service (checkbox)
-- A Submit button to send our form data to the server.
-*/
+import User from './user'
 
 const OnboardForm = ({ values, touched, errors, status }) => {
   const [users, setUsers] = useState([]);
@@ -21,27 +14,31 @@ const OnboardForm = ({ values, touched, errors, status }) => {
   },[status])
 
   return (
-      <FormikForm>
-      {console.log('USERS in RETURN', users)}
-      <Field type="text" name="name" placeholder="Name" />
-      {touched.name && errors.name && <p className="error">{errors.name}</p>}
+<>
+          <FormikForm>
+          {/* {console.log('USERS in RETURN', users)} */}
+          <Field type="text" name="name" placeholder="Name" />
+          {touched.name && errors.name && <p className="error">{errors.name}</p>}
+    
+          <Field type="text" name="email" placeholder="Email" />
+          {touched.email && errors.email && <p className="error">{errors.email}</p>}
+    
+          <Field type="password" name="password" placeholder="Password" />
+          {touched.password && errors.password && (
+            <p className="error">{errors.password}</p>
+          )}
+    
+          <label>
+            I have read and agree to the Terms of Service
+            <Field type="checkbox" name="tos" checked={values.tos} />
+          </label>
+          {touched.tos && errors.tos && <p className="error">{errors.tos}</p>}
+    
+          <button>Submit!</button>
+        </FormikForm>
+        {users.map((user)=><User user_name={user.name}/>)}
 
-      <Field type="text" name="email" placeholder="Email" />
-      {touched.email && errors.email && <p className="error">{errors.email}</p>}
-
-      <Field type="password" name="password" placeholder="Password" />
-      {touched.password && errors.password && (
-        <p className="error">{errors.password}</p>
-      )}
-
-      <label>
-        I have read and agree to the Terms of Service
-        <Field type="checkbox" name="tos" checked={values.tos} />
-      </label>
-      {touched.tos && errors.tos && <p className="error">{errors.tos}</p>}
-
-      <button>Submit!</button>
-    </FormikForm>
+</>   
   );
 };
 
@@ -71,12 +68,11 @@ const FormikOnboardForm = withFormik({
     axios
       .post("https://reqres.in/api/users", values)
       .then(response => {
-        console.log("RESPONSE", response);
-        // console.log("users in axios then", users)
+        // console.log("RESPONSE", response);
         setStatus(response.data)
       })
       .catch(error => {
-        console.log("ERROR", error);
+        // console.log("ERROR", error);
       });
   }
 })(OnboardForm);
